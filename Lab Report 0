@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Lab0}
+\author{Austin Gress }
+\date{January 21, 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Questions}
+\begin{enumerate}
+    \item What did you do over last summer, or what are you planning to do this upcoming summer?
+
+        Last summer I stayed in Moscow and hung out with friends. 
+        This upcoming summer I plan to do an internship in the CO-OP Program.
+
+    \item What do you personally want to get out of this lab?
+      
+        I want to be able to code in Python and to write LaTeX code. 
+        \linebreak[4]
+        I want to be as professional as possible and to get an A.
+\end{enumerate}
+\end{document}

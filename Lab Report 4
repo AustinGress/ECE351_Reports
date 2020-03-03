@@ -1,0 +1,251 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT PREAMBLE %%%
+\documentclass[12pt]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{System Step Response Using Convolution}								
+% Title
+\author{Austin Gress}						
+% Author
+\date{2/25/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+   % \includegraphics[scale = 0.075]{bsulogo.png}\\[1.0 cm]	% University Logo
+\begin{center}    \textsc{\Large   ECE 351 - Section 51 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Lab Report 4}\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Austin Gress  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+ 
+In this lab we will practice using convolution to find a system's unit step response. Using the three functions given you will graph them, find there convolution by hand and then use the convolution function you defined to compare and contrast.
+
+\section{Equations}
+
+\[
+    r(t)= 
+\begin{cases}
+    t, & \text{if } x\geq 0 \\
+    0, & \text{otherwise}
+\end{cases}
+\]
+
+\[
+    u(t)= 
+\begin{cases}
+    1, & \text{if } x\geq 0 \\
+    0, & \text{otherwise}
+\end{cases}
+\]
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}f(\tau)*h(t-\tau)d\tau
+\end{equation}
+
+\begin{equation} \label{Function Plot h1(t)}
+h_1(t) = e^{2t}u(1-t)
+\end{equation}
+
+\begin{equation} \label{Function Plot h2(t)}
+h_2(t) = u(t-2)-u(t-6)
+\end{equation}
+
+\begin{equation} \label{Function Plot for h3(t)}
+h_3(t) = cos(w_0t)u(t)
+\end{equation}
+
+\begin{equation} \label{Function Plot for h3(t)}
+f_0 = 0.25 Hz \hspace{1 cm} w_0 = \dfrac{2\pi}{f}
+\end{equation}
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}(e^{2\tau}u(1-\tau))*u(t-\tau) d\tau
+\end{equation}
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}(u(\tau-2)-u(\tau-6))*u(t-\tau) d\tau
+\end{equation}
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}(cos(w_0\tau)u(\tau))*u(t-\tau) d\tau
+\end{equation}
+
+\newpage
+
+\section{Methodology}
+
+First find the plots of the functions given.
+
+Next, by hand, find the answer to each of equations (7), (8), and (9) listed above.
+
+Finally using the default convolution program (as a check) and your own; graph the convolution to see the unit step response. 
+
+\vspace{0.25 in}
+
+\begin{lstlisting}[language=Python]
+#%% Convolution Code Given
+def Convo(f1, f2):
+    Nf1 = len(f1)
+    Nf2 = len(f2)
+    f1Extended = np.append(f1, np.zeros((1, Nf2-1)))
+    f2Extended = np.append(f2, np.zeros((1, Nf2-1)))
+    results = np.zeros(f1Extended.shape)
+        
+    for i in range(Nf2 + Nf1 - 2):
+        results[i] = 0
+        for j in range(Nf1):
+            if(i-j+1 > 0):
+                try:
+                    results[i] += f1Extended[i]*f2Extended[i-j+1]
+                except:
+                    print(i,j)
+    return results
+\end{lstlisting}
+
+\section{Results}
+
+The beginning of the lab is simple and just a plotting of the given functions.
+
+We then had to find the convolution of the two functions by hand.
+
+\begin{equation} \label{Convolution}
+\int_{-\infty}^{\infty}(e^{2\tau}u(1-\tau))*u(t-\tau) d\tau
+\end{equation}
+
+\begin{equation} \label{Convolution}
+= \int_{-\infty}^{t}(e^{2\tau}u(1-\tau)) d\tau + \int_{-\infty}^{t}(e^{2\tau}u(\tau-1)) d\tau
+\end{equation}
+
+\begin{equation} \label{Convolution}
+= \int_{-\infty}^{t}(e^{2\tau} d\tau + \int_{-\infty}^{t}(e^{2\tau} d\tau
+\end{equation}
+
+\begin{equation} \label{Convolution}
+= \frac{1}{2}e^{2t}u(1-t) + \frac{1}{2}e^{2}u(t-1)
+\end{equation}
+
+\newpage
+
+As you can see from the above equations, the convolution can be a little tricky. As for the other two functions, they were straight forward and the answers are as follows:
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}(u(\tau-2)-u(\tau-6))*u(t-\tau) d\tau = (t-2)u(t-2) - (t-6)u(t-6)
+\end{equation}
+
+\begin{equation} \label{Convolution}
+\int_{0}^{\infty}(cos(w_0\tau)u(\tau))*u(t-\tau) d\tau = (1/w)\sin{(w_0t)u(t)}
+\end{equation}
+
+\newpage
+\subsection{Graphs}
+This is the plots of the functions:
+
+\includegraphics[width=1\textwidth]{Functions.png}
+
+\newpage
+These are the plots of the convolutions and the built in function for checking:
+\includegraphics[width=0.85\textwidth]{Convolution.png}
+\newline
+\includegraphics[width=0.85\textwidth]{Check.png}
+
+\newpage
+\section{Error Analysis}
+In this lab the error was within the convolutions. When convolving the function with the step function to get the system step response, the convolutions would go on for forever. 
+
+A difficulty I had and an error you could get to is using the pre defined variable t for the derived convolutions. Make sure to use the tExtended or similar from the example code above because of the extended time domain. This will give an error where the functions wont be fully convolved.
+
+\section{Conclusion}
+By the end of this lab you should be able to take the convolution a function and the step function to find the unit step response of a system. You should also be able to graph the step response that you derive from the convolution integral. 
+\end{document}
